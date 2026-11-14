@@ -249,9 +249,9 @@ class WC_AllPost_API {
             $produto = array(
                 'peso' => floatval($product->get_weight()) ?: 0.1,
                 'altura' => floatval($product->get_height()) ?: 5,
-                'largura' => floatval($product->get_length()) ?: 15,
-                'profundidade' => floatval($product->get_width()) ?: 10,
-                'preco' => floatval($item->get_total() / $item->get_quantity()),
+                'largura' => floatval($product->get_width()) ?: 15,
+                'profundidade' => floatval($product->get_length()) ?: 10,
+                'preco' => $item->get_quantity() > 0 ? floatval($item->get_total() / $item->get_quantity()) : 0,
                 'titulo' => $product->get_name(),
                 'sku' => $product->get_sku() ?: $product->get_id(),
                 'categoria' => $this->get_product_category($product),
@@ -262,6 +262,10 @@ class WC_AllPost_API {
             $produtos[] = $produto;
         }
         
+        if (empty($produtos)) {
+            return new WP_Error('allpost_no_items', 'Pedido sem produtos válidos para envio.');
+        }
+
         // Calcular totais
         $peso_total = array_sum(array_column($produtos, 'peso'));
         $altura_total = max(array_column($produtos, 'altura'));

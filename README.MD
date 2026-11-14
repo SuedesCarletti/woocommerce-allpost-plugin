@@ -298,7 +298,7 @@ Sempre ative o modo debug ao reportar problemas.
 
 ## Licença
 
-Este plugin é distribuído sob a licença GPL v2 ou posterior.
+Todos os direitos reservados. Código publicado apenas para consulta e avaliação; veja o arquivo [LICENSE](LICENSE).
 
 ## Créditos
 

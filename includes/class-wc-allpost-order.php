@@ -333,10 +333,18 @@ class WC_AllPost_Order {
      * Criar envio na AllPost
      */
     public function create_shipment($order) {
+        // Evita criar o mesmo envio duas vezes (duplo clique, retry)
+        if ($this->order_already_sent($order->get_id())) {
+            return new WP_Error('allpost_already_sent', __('Este pedido já possui envio criado na AllPost.', 'wc-allpost'));
+        }
+
         $cotacao_id = get_post_meta($order->get_id(), '_allpost_cotacao_id', true);
         
         // Converter pedido para formato AllPost
         $pedido_data = $this->api->convert_order_to_allpost($order, $cotacao_id);
+        if (is_wp_error($pedido_data)) {
+            return $pedido_data;
+        }
         
         // Criar pedido via API
         $response = $this->api->criar_pedido($pedido_data);
@@ -347,7 +355,7 @@ class WC_AllPost_Order {
         
         // Adicionar nota ao pedido e salvar dados
         $order->add_order_note(
-            sprintf(__('Envio criado na AllPost. Chave: %s', 'wc-allpost'), $response['chavePedido'])
+            sprintf(__('Envio criado na AllPost. Chave: %s', 'wc-allpost'), $response['chavePedido'] ?? '-')
         );
         
         // Salvar dados do envio nos metadados

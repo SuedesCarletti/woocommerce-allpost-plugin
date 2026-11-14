@@ -149,7 +149,7 @@ class WC_AllPost_Shipping_Method extends WC_Shipping_Method {
         }
         
         // Verificar frete grátis
-        $cart_total = WC()->cart->get_displayed_subtotal();
+        $cart_total = WC()->cart ? WC()->cart->get_displayed_subtotal() : (isset($package['contents_cost']) ? floatval($package['contents_cost']) : 0);
         $free_shipping_min = floatval($this->get_option('free_shipping_min', 0));
         
         if ($free_shipping_min > 0 && $cart_total >= $free_shipping_min) {
@@ -183,7 +183,7 @@ class WC_AllPost_Shipping_Method extends WC_Shipping_Method {
         
         // Processar opções de entrega
         if (isset($cotacao['opcoesEntrega']) && is_array($cotacao['opcoesEntrega'])) {
-            $this->process_shipping_options($cotacao['opcoesEntrega'], $cotacao['retorno']['idCotacao']);
+            $this->process_shipping_options($cotacao['opcoesEntrega'], $cotacao['retorno']['idCotacao'] ?? '');
         } else {
             $this->add_debug_log('Nenhuma opção de entrega encontrada');
             $this->add_fallback_shipping();

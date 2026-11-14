@@ -1,10 +1,11 @@
 <?php
 /**
  * Plugin Name: WooCommerce AllPost
- * E-mail: pessoa3@example.com
+ * Plugin URI: https://github.com/SuedesCarletti/woocommerce-allpost-plugin
  * Description: Integração com AllPost para cotação de frete e gestão de envios
  * Version: 1.0.0
  * Author: Suedes Carletti
+ * License: Todos os direitos reservados / All rights reserved
  * Text Domain: wc-allpost
  * Domain Path: /languages
  * WC requires at least: 3.0
